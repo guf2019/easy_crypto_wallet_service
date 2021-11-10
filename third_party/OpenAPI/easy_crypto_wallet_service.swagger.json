@@ -1,0 +1,104 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "EasyCryptoWalletService",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "EasyCryptoWalletService"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/get_ethereum_balance": {
+      "get": {
+        "summary": "Get ethereum balance.",
+        "description": "This method helps get balance for address in ethereum blockchain.",
+        "operationId": "EasyCryptoWalletService_GetEthereumBalance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/easy_crypto_wallet_serviceGetEthereumBalanceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Ethereum"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "easy_crypto_wallet_serviceGetEthereumBalanceResponse": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "Response messages"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "EasyCryptoWalletService repository",
+    "url": "https://github.com/guf2019/easy_crypto_wallet_service"
+  }
+}

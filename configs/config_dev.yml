@@ -1,0 +1,12 @@
+log_file: easy_crypto_wallet_service.log
+log_level: info
+rest_api:
+  host: 0.0.0.0
+  port: 11000
+  auth_keys:
+    - auth_key_1
+    - auth_key_2
+    - auth_key_3
+grpc_api:
+  host: 0.0.0.0
+  port: 10000

@@ -1,0 +1,52 @@
+syntax="proto3";
+
+package easy_crypto_wallet_service;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/timestamp.proto";
+//import "protoc-gen-swagger/options/annotations.proto";
+
+// Defines the import path that should be used to import the generated package,
+// and the package name.
+option go_package = "github.com/guf2019/easy_crypto_wallet_service/proto;easy_crypto_wallet_service";
+
+// These annotations are used when generating the OpenAPI file.
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "EasyCryptoWalletService";
+    version: "1.0";
+  };
+  external_docs: {
+    url: "https://github.com/guf2019/easy_crypto_wallet_service";
+    description: "EasyCryptoWalletService repository";
+  }
+  schemes: HTTPS;
+};
+
+service EasyCryptoWalletService {
+  rpc GetEthereumBalance(GetEthereumBalanceRequest) returns (GetEthereumBalanceResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/get_ethereum_balance"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Get ethereum balance."
+      description: 'This method helps get balance for address in ethereum blockchain.'
+      tags: "Ethereum"
+    };
+  }
+}
+
+// Enums
+
+// Request messages
+message GetEthereumBalanceRequest{
+  string address = 1;
+}
+
+// Response messages
+message GetEthereumBalanceResponse{
+  string address = 1;
+  double balance = 2;
+}
