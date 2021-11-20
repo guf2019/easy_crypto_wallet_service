@@ -25,6 +25,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service EasyCryptoWalletService {
+  rpc CreateEthereumAccount(CreateEthereumAccountRequest) returns (CreateEthereumAccountResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/create_ethereum_account"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Create ethereum account."
+      description: 'This method helps create ethereum account and return private key.'
+      tags: "Ethereum"
+    };
+  }
+
   rpc GetEthereumBalance(GetEthereumBalanceRequest) returns (GetEthereumBalanceResponse) {
     option (google.api.http) = {
       get: "/api/v1/get_ethereum_balance"
@@ -45,8 +57,18 @@ message GetEthereumBalanceRequest{
   string address = 1;
 }
 
+message CreateEthereumAccountRequest{
+  string password = 1;
+}
+
 // Response messages
 message GetEthereumBalanceResponse{
   string address = 1;
   double balance = 2;
+}
+
+message CreateEthereumAccountResponse{
+  string privateKey = 1;
+  string publicKey = 2;
+  string address = 3;
 }

@@ -19,6 +19,30 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/create_ethereum_account": {
+      "post": {
+        "summary": "Create ethereum account.",
+        "description": "This method helps create ethereum account and return private key.",
+        "operationId": "EasyCryptoWalletService_CreateEthereumAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/easy_crypto_wallet_serviceCreateEthereumAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Ethereum"
+        ]
+      }
+    },
     "/api/v1/get_ethereum_balance": {
       "get": {
         "summary": "Get ethereum balance.",
@@ -53,6 +77,20 @@
     }
   },
   "definitions": {
+    "easy_crypto_wallet_serviceCreateEthereumAccountResponse": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
     "easy_crypto_wallet_serviceGetEthereumBalanceResponse": {
       "type": "object",
       "properties": {

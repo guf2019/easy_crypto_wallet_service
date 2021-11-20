@@ -3,6 +3,8 @@ package ecosystems
 import (
 	"context"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/guf2019/easy_crypto_wallet_service/configs"
 	"github.com/guf2019/easy_crypto_wallet_service/internal/utils"
@@ -39,4 +41,17 @@ func (k *EthereumEcosystem) GetBalance(ctx context.Context, address string) (*Ba
 	etherBalance := utils.WeiToEther(bigFloatBalance)
 	floatEtherBalance, _ := etherBalance.Float64()
 	return &Balance{Value: floatEtherBalance}, nil
+}
+
+func (k *EthereumEcosystem) CreateAccount(ctx context.Context, password string) (*BlockchainKeys, error) {
+	pvk, err := crypto.GenerateKey()
+	if err != nil {
+		return nil, err
+	}
+
+	privateData := hexutil.Encode(crypto.FromECDSA(pvk))
+	publicData := hexutil.Encode(crypto.FromECDSAPub(&pvk.PublicKey))
+	address := crypto.PubkeyToAddress(pvk.PublicKey).Hex()
+
+	return &BlockchainKeys{PrivateKey: privateData, PublicKey: publicData, Address: address}, nil
 }

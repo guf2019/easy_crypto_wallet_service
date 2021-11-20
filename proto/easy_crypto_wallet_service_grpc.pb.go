@@ -17,6 +17,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EasyCryptoWalletServiceClient interface {
+	CreateEthereumAccount(ctx context.Context, in *CreateEthereumAccountRequest, opts ...grpc.CallOption) (*CreateEthereumAccountResponse, error)
 	GetEthereumBalance(ctx context.Context, in *GetEthereumBalanceRequest, opts ...grpc.CallOption) (*GetEthereumBalanceResponse, error)
 }
 
@@ -26,6 +27,15 @@ type easyCryptoWalletServiceClient struct {
 
 func NewEasyCryptoWalletServiceClient(cc grpc.ClientConnInterface) EasyCryptoWalletServiceClient {
 	return &easyCryptoWalletServiceClient{cc}
+}
+
+func (c *easyCryptoWalletServiceClient) CreateEthereumAccount(ctx context.Context, in *CreateEthereumAccountRequest, opts ...grpc.CallOption) (*CreateEthereumAccountResponse, error) {
+	out := new(CreateEthereumAccountResponse)
+	err := c.cc.Invoke(ctx, "/easy_crypto_wallet_service.EasyCryptoWalletService/CreateEthereumAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *easyCryptoWalletServiceClient) GetEthereumBalance(ctx context.Context, in *GetEthereumBalanceRequest, opts ...grpc.CallOption) (*GetEthereumBalanceResponse, error) {
@@ -41,6 +51,7 @@ func (c *easyCryptoWalletServiceClient) GetEthereumBalance(ctx context.Context, 
 // All implementations should embed UnimplementedEasyCryptoWalletServiceServer
 // for forward compatibility
 type EasyCryptoWalletServiceServer interface {
+	CreateEthereumAccount(context.Context, *CreateEthereumAccountRequest) (*CreateEthereumAccountResponse, error)
 	GetEthereumBalance(context.Context, *GetEthereumBalanceRequest) (*GetEthereumBalanceResponse, error)
 }
 
@@ -48,6 +59,9 @@ type EasyCryptoWalletServiceServer interface {
 type UnimplementedEasyCryptoWalletServiceServer struct {
 }
 
+func (UnimplementedEasyCryptoWalletServiceServer) CreateEthereumAccount(context.Context, *CreateEthereumAccountRequest) (*CreateEthereumAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateEthereumAccount not implemented")
+}
 func (UnimplementedEasyCryptoWalletServiceServer) GetEthereumBalance(context.Context, *GetEthereumBalanceRequest) (*GetEthereumBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEthereumBalance not implemented")
 }
@@ -61,6 +75,24 @@ type UnsafeEasyCryptoWalletServiceServer interface {
 
 func RegisterEasyCryptoWalletServiceServer(s *grpc.Server, srv EasyCryptoWalletServiceServer) {
 	s.RegisterService(&_EasyCryptoWalletService_serviceDesc, srv)
+}
+
+func _EasyCryptoWalletService_CreateEthereumAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateEthereumAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasyCryptoWalletServiceServer).CreateEthereumAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/easy_crypto_wallet_service.EasyCryptoWalletService/CreateEthereumAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasyCryptoWalletServiceServer).CreateEthereumAccount(ctx, req.(*CreateEthereumAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _EasyCryptoWalletService_GetEthereumBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -85,6 +117,10 @@ var _EasyCryptoWalletService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "easy_crypto_wallet_service.EasyCryptoWalletService",
 	HandlerType: (*EasyCryptoWalletServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateEthereumAccount",
+			Handler:    _EasyCryptoWalletService_CreateEthereumAccount_Handler,
+		},
 		{
 			MethodName: "GetEthereumBalance",
 			Handler:    _EasyCryptoWalletService_GetEthereumBalance_Handler,
